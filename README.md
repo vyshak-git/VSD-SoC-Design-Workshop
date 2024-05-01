@@ -71,6 +71,18 @@ the tkcon window can be used to find details of the selected cell or pad.
 The standard cells are also present in the floorplan in the left bottom but they are not placed yet as placement stage is still not done.
 ![Screenshot from 2024-05-01 16-56-24](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/72586299-e862-4343-a914-9b347017d865)
 
+##### 2. Running placement
+To run placement we use the following command: <br>
+run_placement <br>
+The placement stats are generated.
+![Screenshot from 2024-05-01 18-03-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/159f70ef-505e-42a6-a7d9-c66bc23250f1)
+
+The placement def is geherated in the /runs directory. We can check the layout using magic the same way we chacked floorplan layout but changing the def file to the placement.def.
+![Screenshot from 2024-05-01 18-05-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3604b0c6-a286-4cf1-bdab-0f2a236b6c07)
+
+If we zoom-in then we can see the various standard cells that have been placed.
+![Screenshot from 2024-05-01 18-06-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/dfc4a15b-592a-45be-8827-9dd31f5bac85)
+
 
 
 
