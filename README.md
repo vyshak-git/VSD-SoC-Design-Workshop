@@ -83,6 +83,18 @@ The placement def is geherated in the /runs directory. We can check the layout u
 If we zoom-in then we can see the various standard cells that have been placed.
 ![Screenshot from 2024-05-01 18-06-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/dfc4a15b-592a-45be-8827-9dd31f5bac85)
 
+## Day 3: Design library cell using Magic Layout and ngspice characterization
+### LABS
+##### 1. Custom inverter
+We first clone the git repository from VSD into our system which contains of a custom inverter layout mag file along with the skywater library files. 
+![Screenshot from 2024-05-03 12-17-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/53b71906-6591-479c-aa2f-2b12220d3433)
+![Screenshot from 2024-05-03 12-18-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/10bf730e-5777-47ed-90c5-a157399c8575)
+
+To open the sky130_inv.mag, we use Magic tool just like we used to open the floorplan files.
+Command: <br>
+magic -T sky130A.tech sky130_inv.mag & <br>
+This opens the layout of the customm inverter.
+![Screenshot from 2024-05-03 12-11-25](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ac4a7e9e-3c0d-4d3c-b23b-0c58138ce665)
 
 
 
