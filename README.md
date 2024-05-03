@@ -96,7 +96,52 @@ magic -T sky130A.tech sky130_inv.mag & <br>
 This opens the layout of the customm inverter.
 ![Screenshot from 2024-05-03 12-11-25](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ac4a7e9e-3c0d-4d3c-b23b-0c58138ce665)
 
+We can explore the design and check the different parts of the inverter by placing the cursor at a region and pressing 'S'. This selects that region. Then we go to the tkcon window and type "what". THis brings up the details of the region.
+![Screenshot from 2024-05-03 16-28-58](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a8a28787-f773-4fda-a369-9fd64fdbb1f3)
+As we can see it is an Nwell region.
 
+##### 2. SPICE Deck
+Before proceeding with the spice simultion, we must extract the layout file. This creates an extraction file. This can be done by "extract all" command in tkcon.
+![Screenshot from 2024-05-03 16-47-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/09fbab46-1cae-4af4-96b9-2016d51ab4bb)
 
+After this we convert this extraction into a spice model using "ext2spice" command. cthresh and rthresh extracts the parascitic information too.
+![Screenshot from 2024-05-03 16-48-42](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ae6e1bb2-2f39-4215-b8ec-885f0965deb6)
+![Screenshot from 2024-05-03 16-49-05](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/1b0beb7f-cc7b-4791-8881-2df95d49c2a2)
+We can see two new files have been created. a ".ext" file and a ".spice" file.
+
+If we open the spice file we can see the spice model that has been extracted from the layout.
+![Screenshot from 2024-05-03 17-11-04](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/75f0211b-f84d-47a7-adea-8e22fbc87160)
+Lets make a few changes to the spice file. We iinclude the pshort and nshort library files which contain the info of the pmos and nmos. Accordingly we have to chnage the name of the pmos and nmos as per the library files. We define the VDD AND VSS signals. We have given a voltage of 3.3V for VDD. We also create a pulse signal that ranges from 0V to 3.3V and has a clock cycle of 4ns with a 50% duty cycle. Then we do perform transient analysis on the model.
+![Screenshot from 2024-05-03 17-56-30](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a88771b3-ee3a-4774-94c0-68ccb894f8ed)
+
+We simulate the spice model using ngspice and plot the input vs output graph.
+![Screenshot from 2024-05-03 18-10-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/6ca7dd48-4ec4-4135-a2a4-41ed03aa1b24)
+
+##### 3. Calculating input rise time
+Input rise time can be defined as the time taken for the input to rise from 20% to 80% of its value.
+In our model the peak voltage is 3.3V.
+20% of 3.3V = 0.66V
+80% of 3.3V = 2.64V
+Lets find the points on the graph and calculate the rise time.
+![Screenshot from 2024-05-03 18-19-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/46e5c9fd-b202-40ec-90bd-891cd71d70e9)
+From the above data,
+4.08-4.02 = 0.06
+So the Input rise time is **0.06ns**.
+
+##### 4. Calculating output fall time
+Output fall time is defined as the time it takes for the output to fall from 80% of its peak value to 20%.
+so it is time taken for signal to go from 2.64V to 0.66V.
+Lets use the graph to find the values.
+![Screenshot from 2024-05-03 18-26-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/89c8f45e-c86f-4ba2-bfe9-270ccea09a71)
+4.09-4.05 = 0.04
+So the Output fall time is **0.04ns**.
+
+##### 5. Calculating Rise propagation delay
+Propagation delay is calculated between the 50% of the values between input and the output. Lets check the time it takes for both input and output signal to reach 50% of its values and subtract it using the graph.
+50% of 3.3V is 1.65V
+![Screenshot from 2024-05-03 18-30-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/27e9d2aa-277e-49a5-ba53-d02d4a28839e)
+We click the 2 points and the values get displayed in the terminal.
+![Screenshot from 2024-05-03 18-31-36](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/476a3867-8e90-43b4-aa7b-6fc45df7c679)
+The propagation delay is very small. Around 0.00007ns.
 
 
