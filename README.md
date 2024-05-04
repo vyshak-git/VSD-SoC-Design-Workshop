@@ -144,4 +144,48 @@ We click the 2 points and the values get displayed in the terminal.
 ![Screenshot from 2024-05-03 18-31-36](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/476a3867-8e90-43b4-aa7b-6fc45df7c679)
 The propagation delay is very small. Around 0.00007ns.
 
+##### 6. Checking DRC errors
+To perform this lab we first download a file with many pre-done layouts with DRC errors. 
+*wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz*
+once downloaded, we extract the file into our home directory.
+*tar xfz drc_tests.tgz*
+If we look into the directory,
+![Screenshot from 2024-05-04 10-35-18](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a68d63e4-2260-4349-b3ca-0b984804aeb1)
+Open Magic
+*magic -d XR*
+![Screenshot from 2024-05-04 10-37-49](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/effcaea4-ae01-46a3-ad52-73791bedc512)
+Lets open the met3 file.
+It contains the various DRC errors related to metal 3. We can also view the rules on https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html#m3
+![Screenshot from 2024-05-04 10-55-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0880e70d-d3e7-4f08-9a9a-25494da76595)
 
+To view the error we have to select the block using the mouse and run the command in the tkcon window.
+*drc why*
+This displays the error. Below are 2 examples.
+![Screenshot from 2024-05-04 11-02-11](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/9c636c26-25c0-4358-9a2d-3e9e2721a2c4)
+![Screenshot from 2024-05-04 11-02-25](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8ebf8ba5-7642-4c91-a796-fcf8d8e2030c)
+![Screenshot from 2024-05-04 11-10-15](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/740d2fd4-3fd5-48b1-bb31-3969815a6485)
+![Screenshot from 2024-05-04 11-10-22](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/65c85e08-f4c0-4b69-8fff-8a150acbebf7)
+
+##### 7. Fixing Poly.9 error
+Lets open up the poly.mag file to check the poly related DRC issues.
+![Screenshot from 2024-05-04 11-30-56](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8eac3bc8-bcb6-43a1-a042-7f8f084e29f1)
+The error poly.9 is about the spacing between the poly resistors and the poly or the diff/tap cells. The min spacing should be 480u. Lets see the spacing in the layout.
+![Screenshot from 2024-05-04 11-33-20](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/86bc0562-eca7-418d-851a-4e192da2a396)
+![Screenshot from 2024-05-04 11-33-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/66658bd8-86b8-4e49-a800-37375ba26342)
+![Screenshot from 2024-05-04 11-34-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/203a079a-95c5-4da0-b5e4-0c187b3b818a)
+From the above screenshot we can see that the spacing is 210um which doesn't fulfill the min requirements.
+Let us fix this by making few changes in the sky130A.tech file.
+![Screenshot from 2024-05-04 11-43-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f2210a9d-eddd-4bbc-9b8f-913ed80c0d5a)
+![Screenshot from 2024-05-04 11-43-32](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/411ff36e-4adf-429c-8202-0afbd1c767ee)
+In the above two screenshots of the tech file we can see that min spacing is defined only between poly resistors and diffusion and N-tap. There is no mention of spacing between poly resistors and poly. So we need to include the statements in both the sections.
+![Screenshot from 2024-05-04 11-44-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f8fc4b8c-7502-428e-8b54-d03e0c9eae33)
+![Screenshot from 2024-05-04 11-45-40](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/57558a06-79d9-4522-a69f-dfd72094a6e6)
+Once written, we save the tech file. then run the following command in the tkcon window.
+*tech load sky130A.tech*
+![Screenshot from 2024-05-04 11-54-14](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/90d527db-672a-4188-93ab-ab3df32c59fd)
+
+Then we have to check DRC again using the following command.
+*drc check*
+![Screenshot from 2024-05-04 11-55-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/588a3496-2026-475c-b28a-fd07d6cb4772)
+![Screenshot from 2024-05-04 11-55-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/bfb14b54-02f8-4b88-840b-662d1390c359)
+We can see that the spacing has now been applied and hence the DRC has been fixed.
