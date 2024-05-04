@@ -189,3 +189,45 @@ Then we have to check DRC again using the following command.
 ![Screenshot from 2024-05-04 11-55-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/588a3496-2026-475c-b28a-fd07d6cb4772)
 ![Screenshot from 2024-05-04 11-55-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/bfb14b54-02f8-4b88-840b-662d1390c359)
 We can see that the spacing has now been applied and hence the DRC has been fixed.
+
+## Day 4: Pre-layout timing analysis and importance of good clock tree
+### LABS
+##### 1. Converting grid info to track info
+We first open the track information in the following directory.
+![Screenshot from 2024-05-04 17-15-43](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/46fe098b-404c-4acf-aa94-792c7c7d00cd)
+![Screenshot from 2024-05-04 17-16-00](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3ced9a5c-ab0d-40ac-9b26-69faaf2bfc73)
+Here the first value depicts the offset value and the second value depicts the pitch of the metal. X means on the x-axis and Y means on the y-axis. so the offset of li1 on x-axis is 0.23um and on y-axis it is 0.17um. The metal pitch for li1 on x-axis is 0.46um and on y-axis it is 0.34um.
+Now we need to convert our grid lines according to the track information. Let us look at the current grid lines,
+![Screenshot from 2024-05-04 17-17-33](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ec135b6e-41a3-4e0f-af7c-84e4664e02b5)
+
+The ports need to fall on the intersection of the grid lines so that they can be connected easily both vertically and horizontally. The width of the standard cell must be in the odd multiples of X pitch. We set the grid values according to the track info file.
+![Screenshot from 2024-05-04 17-20-02](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d46de8a2-c4d9-4c47-b7ce-866a4f5f7134)
+![Screenshot from 2024-05-04 17-20-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/eab87b80-1a87-40c6-9c53-87b4c80c8ddd)
+We can see that the grid boxes have expanded in size and the ports are placed at the intersections.
+
+##### 2. Converting layout to LEF
+First let us save the layout with a custom name. Here we give the name "phtm_inv.mag"
+![Screenshot from 2024-05-04 18-09-42](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/4b0848a8-91d1-48f7-944a-814fa3a92c1d)
+We extract this design in the lef format using the command,
+*lef write*
+![Screenshot from 2024-05-04 18-10-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8238f1d6-578a-4d07-ba03-7c9b97330cf5)
+There should be a new file called "phtm_inv.lef" now in the directory. Let us open it up and see the contents.
+![Screenshot from 2024-05-04 18-10-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a62b0d92-8ee7-4128-ae05-44300ecb7177)
+![Screenshot from 2024-05-04 18-11-39](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/12648bc8-da24-4e17-b80e-d9b95341195d)
+The different pins and their signal types are all described in the LEF file.
+
+Lets copy the LEF file and the library files into the src directory of our design.
+![Screenshot from 2024-05-04 18-36-10](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/49c43969-29d2-409b-95cd-5e3d17de708d)
+![Screenshot from 2024-05-04 18-35-11](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d863bf47-dfcb-455f-be75-2e168eecd5cd)
+![Screenshot from 2024-05-04 18-36-32](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/1f756b69-d625-485d-bd9f-ad49297d60af)
+All the nescessary files have been copied. Now we are ready to run the flow.
+Let us include the library files in the config.tcl file and also add the extra LEF.
+![Screenshot from 2024-05-04 18-44-46](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0a31b592-203d-4400-88b4-2cf69f1f39d5)
+
+Now we can run the design preparation step just like we did in Day 2. After the design is prepared we have to run 2 more commands to include our custom LEF.
+![Screenshot from 2024-05-04 19-11-05](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/352e7944-8fee-42c7-b24d-0fb46d309937)
+
+Once this is done we can proceed with synthesis. The synthesis statistics gives us information of the std cells that have been used. Here we can verify if our cell has been used,
+![Screenshot from 2024-05-04 19-14-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/42e90f9d-ba58-4293-9420-a8feeb281b57)
+Here we can see that there are 1554 instances of "phtm_inv".
+
