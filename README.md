@@ -80,19 +80,19 @@ The standard cells are also present in the floorplan in the left bottom but they
 ##### 2. Running placement
 To run placement we use the following command: <br>
 `run_placement` <br>
-The placement stats are generated.
+The placement stats are generated. <br>
 ![Screenshot from 2024-05-01 18-03-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/159f70ef-505e-42a6-a7d9-c66bc23250f1)
 
-The placement def is generated in the `/runs` directory. We can check the layout using magic the same way we chacked floorplan layout but changing the def file to the `placement.def`.
+The placement def is generated in the `/runs` directory. We can check the layout using magic the same way we chacked floorplan layout but changing the def file to the `placement.def`. <br>
 ![Screenshot from 2024-05-01 18-05-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3604b0c6-a286-4cf1-bdab-0f2a236b6c07)
 
-If we zoom-in then we can see the various standard cells that have been placed.
+If we zoom-in then we can see the various standard cells that have been placed. <br>
 ![Screenshot from 2024-05-01 18-06-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/dfc4a15b-592a-45be-8827-9dd31f5bac85)
 
 ## Day 3: Design library cell using Magic Layout and ngspice characterization
 ### LABS
 ##### 1. Custom inverter
-We first clone the git repository from VSD into our system which contains of a custom inverter layout mag file along with the skywater library files. 
+We first clone the git repository from VSD into our system which contains of a custom inverter layout mag file along with the skywater library files. <br>
 ![Screenshot from 2024-05-03 12-17-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/53b71906-6591-479c-aa2f-2b12220d3433)
 ![Screenshot from 2024-05-03 12-18-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/10bf730e-5777-47ed-90c5-a157399c8575)
 
@@ -101,28 +101,28 @@ Command: <br>
 ```bash
 magic -T sky130A.tech sky130_inv.mag &
 ```
-This opens the layout of the custom inverter.
+This opens the layout of the custom inverter. <br>
 ![Screenshot from 2024-05-03 12-11-25](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ac4a7e9e-3c0d-4d3c-b23b-0c58138ce665)
 
-We can explore the design and check the different parts of the inverter by placing the cursor at a region and pressing 'S'. This selects that region. Then we go to the tkcon window and type `what`. THis brings up the details of the region.
-![Screenshot from 2024-05-03 16-28-58](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a8a28787-f773-4fda-a369-9fd64fdbb1f3)
+We can explore the design and check the different parts of the inverter by placing the cursor at a region and pressing 'S'. This selects that region. Then we go to the tkcon window and type `what`. THis brings up the details of the region. <br>
+![Screenshot from 2024-05-03 16-28-58](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a8a28787-f773-4fda-a369-9fd64fdbb1f3) <br>
 As we can see it is an Nwell region.
 
 ##### 2. SPICE Deck
-Before proceeding with the spice simultion, we must extract the layout file. This creates an extraction file. This can be done by `extract all` command in tkcon.
+Before proceeding with the spice simultion, we must extract the layout file. This creates an extraction file. This can be done by `extract all` command in tkcon. <br>
 ![Screenshot from 2024-05-03 16-47-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/09fbab46-1cae-4af4-96b9-2016d51ab4bb)
 
-After this we convert this extraction into a spice model using "ext2spice" command. cthresh and rthresh extracts the parascitic information too.
+After this we convert this extraction into a spice model using "ext2spice" command. cthresh and rthresh extracts the parascitic information too. <br>
 ![Screenshot from 2024-05-03 16-48-42](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ae6e1bb2-2f39-4215-b8ec-885f0965deb6)
-![Screenshot from 2024-05-03 16-49-05](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/1b0beb7f-cc7b-4791-8881-2df95d49c2a2)
+![Screenshot from 2024-05-03 16-49-05](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/1b0beb7f-cc7b-4791-8881-2df95d49c2a2) <br>
 We can see two new files have been created. a `.ext` file and a `.spice` file.
 
-If we open the spice file we can see the spice model that has been extracted from the layout.
-![Screenshot from 2024-05-03 17-11-04](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/75f0211b-f84d-47a7-adea-8e22fbc87160)
-Lets make a few changes to the spice file. We include the pshort and nshort library files which contain the info of the pmos and nmos. Accordingly we have to change the name of the pmos and nmos as per the library files. We define the VDD AND VSS signals. We have given a voltage of 3.3V for VDD. We also create a pulse signal that ranges from 0V to 3.3V and has a clock cycle of 4ns with a 50% duty cycle. Then we do perform transient analysis on the model.
+If we open the spice file we can see the spice model that has been extracted from the layout. <br>
+![Screenshot from 2024-05-03 17-11-04](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/75f0211b-f84d-47a7-adea-8e22fbc87160) <br>
+Lets make a few changes to the spice file. We include the pshort and nshort library files which contain the info of the pmos and nmos. Accordingly we have to change the name of the pmos and nmos as per the library files. We define the VDD AND VSS signals. We have given a voltage of 3.3V for VDD. We also create a pulse signal that ranges from 0V to 3.3V and has a clock cycle of 4ns with a 50% duty cycle. Then we do perform transient analysis on the model. <br>
 ![Screenshot from 2024-05-03 17-56-30](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a88771b3-ee3a-4774-94c0-68ccb894f8ed)
 
-We simulate the spice model using ngspice and plot the input vs output graph.
+We simulate the spice model using ngspice and plot the input vs output graph. <br>
 ![Screenshot from 2024-05-03 18-10-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/6ca7dd48-4ec4-4135-a2a4-41ed03aa1b24)
 
 ##### 3. Calculating input rise time
@@ -146,10 +146,10 @@ So the Output fall time is **0.04ns**.
 
 ##### 5. Calculating Rise propagation delay
 Propagation delay is calculated between the 50% of the values between input and the output. Lets check the time it takes for both input and output signal to reach 50% of its values and subtract it using the graph.
-50% of 3.3V is 1.65V
-![Screenshot from 2024-05-03 18-30-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/27e9d2aa-277e-49a5-ba53-d02d4a28839e)
-We click the 2 points and the values get displayed in the terminal.
-![Screenshot from 2024-05-03 18-31-36](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/476a3867-8e90-43b4-aa7b-6fc45df7c679)
+50% of 3.3V is 1.65V <br>
+![Screenshot from 2024-05-03 18-30-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/27e9d2aa-277e-49a5-ba53-d02d4a28839e) <br>
+We click the 2 points and the values get displayed in the terminal. <br>
+![Screenshot from 2024-05-03 18-31-36](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/476a3867-8e90-43b4-aa7b-6fc45df7c679) <br>
 The propagation delay is very small. Around 0.00007ns.
 
 ##### 6. Checking DRC errors
@@ -161,15 +161,15 @@ once downloaded, we extract the file into our home directory.
 ```bash
 tar xfz drc_tests.tgz
 ```
-If we look into the directory,
-![Screenshot from 2024-05-04 10-35-18](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a68d63e4-2260-4349-b3ca-0b984804aeb1)
+If we look into the directory, <br>
+![Screenshot from 2024-05-04 10-35-18](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a68d63e4-2260-4349-b3ca-0b984804aeb1) <br>
 Open Magic
 ```bash
 magic -d XR
 ```
-![Screenshot from 2024-05-04 10-37-49](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/effcaea4-ae01-46a3-ad52-73791bedc512)
+![Screenshot from 2024-05-04 10-37-49](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/effcaea4-ae01-46a3-ad52-73791bedc512) <br>
 Lets open the `met3` file.
-It contains the various DRC errors related to metal 3. We can also view the rules on https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html#m3
+It contains the various DRC errors related to metal 3. We can also view the rules on https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html#m3 <br>
 ![Screenshot from 2024-05-04 10-55-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0880e70d-d3e7-4f08-9a9a-25494da76595)
 
 To view the error we have to select the block using the mouse and run the command in the tkcon window,
@@ -181,12 +181,12 @@ This displays the error. Below are 2 examples. <br>
 ![Screenshot from 2024-05-04 11-10-22](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/65c85e08-f4c0-4b69-8fff-8a150acbebf7)
 
 ##### 7. Fixing Poly.9 error
-Lets open up the `poly.mag` file to check the poly related DRC issues.
-![Screenshot from 2024-05-04 11-30-56](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8eac3bc8-bcb6-43a1-a042-7f8f084e29f1)
-The error poly.9 is about the spacing between the poly resistors and the poly or the diff/tap cells. The min spacing should be 480u. Lets see the spacing in the layout.
+Lets open up the `poly.mag` file to check the poly related DRC issues. <br>
+![Screenshot from 2024-05-04 11-30-56](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8eac3bc8-bcb6-43a1-a042-7f8f084e29f1) <br>
+The error poly.9 is about the spacing between the poly resistors and the poly or the diff/tap cells. The min spacing should be 480u. Lets see the spacing in the layout. <br>
 ![Screenshot from 2024-05-04 11-33-20](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/86bc0562-eca7-418d-851a-4e192da2a396)
 ![Screenshot from 2024-05-04 11-33-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/66658bd8-86b8-4e49-a800-37375ba26342)
-![Screenshot from 2024-05-04 11-34-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/203a079a-95c5-4da0-b5e4-0c187b3b818a)
+![Screenshot from 2024-05-04 11-34-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/203a079a-95c5-4da0-b5e4-0c187b3b818a) <br>
 From the above screenshot we can see that the spacing is 210um which doesn't fulfill the min requirements.
 Let us fix this by making few changes in the `sky130A.tech` file. <br>
 ![Screenshot from 2024-05-04 11-43-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f2210a9d-eddd-4bbc-9b8f-913ed80c0d5a)
@@ -195,13 +195,13 @@ In the above two screenshots of the tech file we can see that min spacing is def
 ![Screenshot from 2024-05-04 11-44-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f8fc4b8c-7502-428e-8b54-d03e0c9eae33)
 ![Screenshot from 2024-05-04 11-45-40](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/57558a06-79d9-4522-a69f-dfd72094a6e6) <br>
 Once written, we save the tech file. then run the following command in the tkcon window,
-`tech load sky130A.tech`
+`tech load sky130A.tech` <br>
 ![Screenshot from 2024-05-04 11-54-14](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/90d527db-672a-4188-93ab-ab3df32c59fd)
 
 Then we have to check DRC again using the following command,
-`drc check`
+`drc check` <br>
 ![Screenshot from 2024-05-04 11-55-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/588a3496-2026-475c-b28a-fd07d6cb4772)
-![Screenshot from 2024-05-04 11-55-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/bfb14b54-02f8-4b88-840b-662d1390c359)
+![Screenshot from 2024-05-04 11-55-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/bfb14b54-02f8-4b88-840b-662d1390c359) <br>
 We can see that the spacing has now been applied and hence the DRC has been fixed.
 
 ##### 8. Describing DRC as a geometric construct
@@ -213,20 +213,20 @@ We can see that the spacing has now been applied and hence the DRC has been fixe
 ## Day 4: Pre-layout timing analysis and importance of good clock tree
 ### LABS
 ##### 1. Converting grid info to track info
-We first open the track information in the following directory.
+We first open the track information in the following directory. <br>
 ![Screenshot from 2024-05-04 17-15-43](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/46fe098b-404c-4acf-aa94-792c7c7d00cd)
 ![Screenshot from 2024-05-04 17-16-00](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3ced9a5c-ab0d-40ac-9b26-69faaf2bfc73) <br>
-Here the first value depicts the offset value and the second value depicts the pitch of the metal. X means on the x-axis and Y means on the y-axis. so the offset of li1 on x-axis is 0.23um and on y-axis it is 0.17um. The metal pitch for li1 on x-axis is 0.46um and on y-axis it is 0.34um.
-Now we need to convert our grid lines according to the track information. Let us look at the current grid lines,
+Here the first value depicts the offset value and the second value depicts the pitch of the metal. X means on the x-axis and Y means on the y-axis. so the offset of li1 on x-axis is 0.23um and on y-axis it is 0.17um. The metal pitch for li1 on x-axis is 0.46um and on y-axis it is 0.34um. <br>
+Now we need to convert our grid lines according to the track information. Let us look at the current grid lines, <br>
 ![Screenshot from 2024-05-04 17-17-33](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ec135b6e-41a3-4e0f-af7c-84e4664e02b5)
 
-The ports need to fall on the intersection of the grid lines so that they can be connected easily both vertically and horizontally. The width of the standard cell must be in the odd multiples of X pitch. We set the grid values according to the track info file.
+The ports need to fall on the intersection of the grid lines so that they can be connected easily both vertically and horizontally. The width of the standard cell must be in the odd multiples of X pitch. We set the grid values according to the track info file. <br>
 ![Screenshot from 2024-05-04 17-20-02](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d46de8a2-c4d9-4c47-b7ce-866a4f5f7134)
-![Screenshot from 2024-05-04 17-20-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/eab87b80-1a87-40c6-9c53-87b4c80c8ddd)
+![Screenshot from 2024-05-04 17-20-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/eab87b80-1a87-40c6-9c53-87b4c80c8ddd) <br>
 We can see that the grid boxes have expanded in size and the ports are placed at the intersections.
 
 ##### 2. Converting layout to LEF
-First let us save the layout with a custom name. Here we give the name `sky130_vsdinv.mag`
+First let us save the layout with a custom name. Here we give the name `sky130_vsdinv.mag` <br>
 ![Screenshot from 2024-05-07 13-13-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/2e05c24d-a04d-40e6-9f27-75180300edf3)
 
 We extract this design in the lef format using the command, <br>
@@ -240,12 +240,12 @@ There should be a new file called `sky130_vsdinv.lef` now in the directory. Let 
 
 The different pins and their signal types are all described in the LEF file.
 
-Lets copy the LEF file and the library files into the src directory of our design.
+Lets copy the LEF file and the library files into the src directory of our design. <br>
 ![Screenshot from 2024-05-07 13-14-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f901ccff-b579-4025-8c7a-8807549ca872)
 ![Screenshot from 2024-05-07 13-15-10](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ff0c034f-89dc-460b-bc6f-4de5b53178b2)
 
 All the nescessary files have been copied. Now we are ready to run the flow.
-Let us include the library files in the `config.tcl` file and also add the extra LEF.
+Let us include the library files in the `config.tcl` file and also add the extra LEF. <br>
 ![Screenshot from 2024-05-04 18-44-46](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0a31b592-203d-4400-88b4-2cf69f1f39d5)
 
 Now we can run the design preparation step just like we did in Day 2. After the design is prepared we have to run 2 more commands to include our custom LEF. <br>
