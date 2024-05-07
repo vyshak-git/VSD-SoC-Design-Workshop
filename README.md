@@ -25,19 +25,21 @@ the /openlane directory consists of designs, flow scripts, etc
 ![Screenshot from 2024-05-01 12-51-26](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0b1bd9b5-2c43-4d58-bffb-27b447524ba8)
 
 ##### 2. Running OpenLANE
-To run OpenLANE, we launch the docker by entering "docker" in the CLI. This enters the bash mode. here we run the flow.tcl script in the interactive mode. we run it interactively as we want it to run step by step and not the entire flow in one go. 
+To run OpenLANE, we launch the docker by entering `docker` in the CLI. This enters the bash mode. here we run the flow.tcl script in the interactive mode. we run it interactively as we want it to run step by step and not the entire flow in one go. 
 ![Screenshot from 2024-05-01 12-58-23](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f9f96eae-0081-4007-a496-09293c77f7f8)
 
 ##### 3. Design Preparation
 The first step of the flow is design preparation. the various files like the RTL, constraints, timing libraries, LEF, technology files need to be read and linked, This step is design preparation. <br>
 Commands:<br>
-%prep -design picorv32a <br>
+```bash
+prep -design picorv32a
+```
 ![Screenshot from 2024-05-01 12-59-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/61e648b9-2a71-4db6-a0d6-3a6e5e47d8c8)
 
 ##### 4. Synthesis
 Synthesis is the stage that converts the RTL into gate-level netlist. <br>
 Commands: <br>
-%run_synthesis <br>
+`run_synthesis` <br>
 After synthesis is completed, we get a stats on the number of cells, the area consumed by the cells and the timing slack details.
 ![Screenshot from 2024-05-01 13-02-40](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/b217f951-5a57-4b39-9965-17dc2d2a4951)
 ![Screenshot from 2024-05-01 13-02-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/9ed9f9d9-1b58-4f8e-a9f6-c0ced559c6ff)
@@ -73,7 +75,7 @@ The standard cells are also present in the floorplan in the left bottom but they
 
 ##### 2. Running placement
 To run placement we use the following command: <br>
-run_placement <br>
+`run_placement` <br>
 The placement stats are generated.
 ![Screenshot from 2024-05-01 18-03-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/159f70ef-505e-42a6-a7d9-c66bc23250f1)
 
@@ -96,12 +98,12 @@ magic -T sky130A.tech sky130_inv.mag & <br>
 This opens the layout of the customm inverter.
 ![Screenshot from 2024-05-03 12-11-25](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ac4a7e9e-3c0d-4d3c-b23b-0c58138ce665)
 
-We can explore the design and check the different parts of the inverter by placing the cursor at a region and pressing 'S'. This selects that region. Then we go to the tkcon window and type "what". THis brings up the details of the region.
+We can explore the design and check the different parts of the inverter by placing the cursor at a region and pressing 'S'. This selects that region. Then we go to the tkcon window and type `what`. THis brings up the details of the region.
 ![Screenshot from 2024-05-03 16-28-58](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a8a28787-f773-4fda-a369-9fd64fdbb1f3)
 As we can see it is an Nwell region.
 
 ##### 2. SPICE Deck
-Before proceeding with the spice simultion, we must extract the layout file. This creates an extraction file. This can be done by "extract all" command in tkcon.
+Before proceeding with the spice simultion, we must extract the layout file. This creates an extraction file. This can be done by `extract all` command in tkcon.
 ![Screenshot from 2024-05-03 16-47-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/09fbab46-1cae-4af4-96b9-2016d51ab4bb)
 
 After this we convert this extraction into a spice model using "ext2spice" command. cthresh and rthresh extracts the parascitic information too.
@@ -119,21 +121,21 @@ We simulate the spice model using ngspice and plot the input vs output graph.
 
 ##### 3. Calculating input rise time
 Input rise time can be defined as the time taken for the input to rise from 20% to 80% of its value.
-In our model the peak voltage is 3.3V.
-20% of 3.3V = 0.66V
-80% of 3.3V = 2.64V
-Lets find the points on the graph and calculate the rise time.
-![Screenshot from 2024-05-03 18-19-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/46e5c9fd-b202-40ec-90bd-891cd71d70e9)
+In our model the peak voltage is 3.3V. <br>
+20% of 3.3V = 0.66V <br>
+80% of 3.3V = 2.64V <br>
+Lets find the points on the graph and calculate the rise time. <br>
+![Screenshot from 2024-05-03 18-19-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/46e5c9fd-b202-40ec-90bd-891cd71d70e9) <br>
 From the above data,
 4.08-4.02 = 0.06
 So the Input rise time is **0.06ns**.
 
 ##### 4. Calculating output fall time
 Output fall time is defined as the time it takes for the output to fall from 80% of its peak value to 20%.
-so it is time taken for signal to go from 2.64V to 0.66V.
-Lets use the graph to find the values.
-![Screenshot from 2024-05-03 18-26-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/89c8f45e-c86f-4ba2-bfe9-270ccea09a71)
-4.09-4.05 = 0.04
+so it is time taken for signal to go from 2.64V to 0.66V.<br>
+Lets use the graph to find the values. <br>
+![Screenshot from 2024-05-03 18-26-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/89c8f45e-c86f-4ba2-bfe9-270ccea09a71) <br>
+4.09-4.05 = 0.04 <br>
 So the Output fall time is **0.04ns**.
 
 ##### 5. Calculating Rise propagation delay
@@ -229,10 +231,10 @@ Let us include the library files in the config.tcl file and also add the extra L
 ![Screenshot from 2024-05-04 18-44-46](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0a31b592-203d-4400-88b4-2cf69f1f39d5)
 
 Now we can run the design preparation step just like we did in Day 2. After the design is prepared we have to run 2 more commands to include our custom LEF. <br>
-`
-set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+```bash
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef] 
 add_lefs -src $lefs
-`
+```
 
 Once this is done we can proceed with synthesis. The synthesis statistics gives us information of the std cells that have been used. Here we can verify if our cell has been used,
 ![Screenshot from 2024-05-07 13-32-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0ff369e5-84b7-4744-a4b2-b965c3caee84)
@@ -247,11 +249,26 @@ Lets check the values of few of the parameters.
 ![Screenshot from 2024-05-07 13-34-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f65d369c-5524-4309-898f-299f0e9d5505)
 
 Here we can see that the synthesis strategy is more oriented towards area than delay. And also the cell sizing is turned off. So we make changes on those 2 parametes and run synthesis again.
-![Screenshot from 2024-05-07 13-35-03](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0077bc19-27a3-4483-978e-971ebd3ad65d)
-![Screenshot from 2024-05-07 13-37-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ae276bc3-e0a4-4a3b-b4bd-1af6a33cc4f2)
-![Screenshot from 2024-05-07 13-37-47](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/669a88a2-d6f4-4a0d-8758-9ff4925c2be9)
+![Screenshot from 2024-05-07 16-14-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/911c927b-e5b5-405d-9591-77632a050bdf)
+![Screenshot from 2024-05-07 13-37-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/56f24509-3e67-443c-9254-be31961dffbd)
+![Screenshot from 2024-05-07 16-13-19](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/9fc2123f-b77c-4905-962c-e94a411879eb)
 
 Above we can see that the slack is met but the area has increased.
 
+##### 4. Floorplan and placement of the custom LEF
+After synthesis we perform floorplan using the following commands, <br>
+```bash
+init_floorplan
+place_io
+tap_decap_or
+```
+Once the floorplan is completed we can run placement using `run_placement` <br>
+We can view the layout using magic tool. <br>
+![Screenshot from 2024-05-07 16-06-34](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f2d40d5f-e4e9-4f87-aba9-4b6bcce13649)
+
+When we zoom in we can search a little and the our custom inverter being used in the design. 
+![Screenshot from 2024-05-07 16-07-57](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/931f3ed8-21d3-49b3-99cd-8820a4943e61)
+
+Use the `expand` command in tkcon to view the internal connections of the inverter.
 
 
