@@ -251,9 +251,9 @@ Lets check the values of few of the parameters.
 Here we can see that the synthesis strategy is more oriented towards area than delay. And also the cell sizing is turned off. So we make changes on those 2 parametes and run synthesis again.
 ![Screenshot from 2024-05-07 16-14-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/911c927b-e5b5-405d-9591-77632a050bdf)
 ![Screenshot from 2024-05-07 13-37-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/56f24509-3e67-443c-9254-be31961dffbd)
-![Screenshot from 2024-05-07 16-13-19](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/9fc2123f-b77c-4905-962c-e94a411879eb)
+![Screenshot from 2024-05-07 17-33-29](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a27f7fcb-3388-476e-b040-22494de53b90)
 
-Above we can see that the slack is met but the area has increased.
+Above we can see that the slack is reduced but the area has increased.
 
 ##### 4. Floorplan and placement of the custom LEF
 After synthesis we perform floorplan using the following commands, <br>
