@@ -206,28 +206,52 @@ The ports need to fall on the intersection of the grid lines so that they can be
 We can see that the grid boxes have expanded in size and the ports are placed at the intersections.
 
 ##### 2. Converting layout to LEF
-First let us save the layout with a custom name. Here we give the name "phtm_inv.mag"
-![Screenshot from 2024-05-04 18-09-42](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/4b0848a8-91d1-48f7-944a-814fa3a92c1d)
-We extract this design in the lef format using the command,
-*lef write*
-![Screenshot from 2024-05-04 18-10-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8238f1d6-578a-4d07-ba03-7c9b97330cf5)
+First let us save the layout with a custom name. Here we give the name "sky130_vsdinv.mag"
+![Screenshot from 2024-05-07 13-13-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/2e05c24d-a04d-40e6-9f27-75180300edf3)
+
+We extract this design in the lef format using the command, <br>
+`
+lef write
+`
+![Screenshot from 2024-05-07 13-13-24](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/6a0d4ddf-0629-4b96-83a0-6ef1cf79d54c)
+
 There should be a new file called "phtm_inv.lef" now in the directory. Let us open it up and see the contents.
-![Screenshot from 2024-05-04 18-10-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a62b0d92-8ee7-4128-ae05-44300ecb7177)
-![Screenshot from 2024-05-04 18-11-39](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/12648bc8-da24-4e17-b80e-d9b95341195d)
+![Screenshot from 2024-05-07 13-15-59](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/c48d3925-510b-42e0-90bf-6ef0e6c76784)
+
 The different pins and their signal types are all described in the LEF file.
 
 Lets copy the LEF file and the library files into the src directory of our design.
-![Screenshot from 2024-05-04 18-36-10](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/49c43969-29d2-409b-95cd-5e3d17de708d)
-![Screenshot from 2024-05-04 18-35-11](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d863bf47-dfcb-455f-be75-2e168eecd5cd)
-![Screenshot from 2024-05-04 18-36-32](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/1f756b69-d625-485d-bd9f-ad49297d60af)
+![Screenshot from 2024-05-07 13-14-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f901ccff-b579-4025-8c7a-8807549ca872)
+![Screenshot from 2024-05-07 13-15-10](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ff0c034f-89dc-460b-bc6f-4de5b53178b2)
+
 All the nescessary files have been copied. Now we are ready to run the flow.
 Let us include the library files in the config.tcl file and also add the extra LEF.
 ![Screenshot from 2024-05-04 18-44-46](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0a31b592-203d-4400-88b4-2cf69f1f39d5)
 
-Now we can run the design preparation step just like we did in Day 2. After the design is prepared we have to run 2 more commands to include our custom LEF.
-![Screenshot from 2024-05-04 19-11-05](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/352e7944-8fee-42c7-b24d-0fb46d309937)
+Now we can run the design preparation step just like we did in Day 2. After the design is prepared we have to run 2 more commands to include our custom LEF. <br>
+`
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+`
 
 Once this is done we can proceed with synthesis. The synthesis statistics gives us information of the std cells that have been used. Here we can verify if our cell has been used,
-![Screenshot from 2024-05-04 19-14-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/42e90f9d-ba58-4293-9420-a8feeb281b57)
-Here we can see that there are 1554 instances of "phtm_inv".
+![Screenshot from 2024-05-07 13-32-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0ff369e5-84b7-4744-a4b2-b965c3caee84)
+
+Here we can see that there are 1554 instances of "sky130_vsdinv".
+
+##### 3. Reducing slack during synthesis
+If we see the slack value generated after performing CTS, we can see that it is quite high. 
+![Screenshot from 2024-05-07 13-33-00](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/10cea214-6d9b-45c3-bd0e-a17f444367ec)
+
+Lets check the values of few of the parameters.
+![Screenshot from 2024-05-07 13-34-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f65d369c-5524-4309-898f-299f0e9d5505)
+
+Here we can see that the synthesis strategy is more oriented towards area than delay. And also the cell sizing is turned off. So we make changes on those 2 parametes and run synthesis again.
+![Screenshot from 2024-05-07 13-35-03](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0077bc19-27a3-4483-978e-971ebd3ad65d)
+![Screenshot from 2024-05-07 13-37-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ae276bc3-e0a4-4a3b-b4bd-1af6a33cc4f2)
+![Screenshot from 2024-05-07 13-37-47](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/669a88a2-d6f4-4a0d-8758-9ff4925c2be9)
+
+Above we can see that the slack is met but the area has increased.
+
+
 
