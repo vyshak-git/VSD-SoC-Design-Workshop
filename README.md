@@ -272,4 +272,52 @@ When we zoom in we can search a little and the our custom inverter being used in
 Use the `expand` command in tkcon to view the internal connections of the inverter.
 ![Screenshot from 2024-05-07 16-10-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/92572b58-a554-4575-aa71-e14d29564ed2)
 
+##### 5. Static Timing Analysis
+To perform STA we first create a file `pre_sta.conf` in the `openlane/` directory. The contents of it are as follows, <br>
+![Screenshot from 2024-05-07 17-36-47](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/83469a32-49ae-439a-b58d-c2dddfbbdbc0)
 
+We also create a SDC file called `/my_base.sdc`. It is the `openlane/scripts/base.sdc` with some additions of environment variables. The contents of the sdc are as follows. <br>
+![Screenshot from 2024-05-07 17-36-27](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8cf81758-7436-492b-a121-7906ebc69162)
+
+Once these files are in place we perform STA. <br>
+In openlane terminal,
+```bash
+sta pre_sta.conf
+```
+This should bring up the timing report. The slack is same as we got at the end of synthesis. <br>
+![Screenshot from 2024-05-07 17-35-11](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d3f26a93-12f7-4fe2-9c4b-a6f1b0207a18)
+![Screenshot from 2024-05-07 17-35-19](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/87c56b47-e99a-4175-828f-3ae3aafe9237)
+
+We observe that many of these cells have high fanouts of 5 and 6 which increases the load capacitance and inturn contributes to the delay. Let us limit the fanout to only 4.
+```bash
+set ::env(SYNTH_MAX_FANOUT) 4
+```
+![Screenshot from 2024-05-07 17-37-24](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a5ccaec1-429a-4b28-a37a-b38c137a6e09)
+
+After this when we run the STA again we notice that the slack has reduced a lot. 
+![Screenshot from 2024-05-07 17-41-44](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/7d0990b5-61dc-4e00-adb7-297944202a98)
+
+To furthur improve the timing, we must look at the report and check what is contributing to the delay. Let us pick a cell which has a relatively high delay and observe it.
+![Screenshot from 2024-05-07 17-46-38](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/c401544b-c8ca-47af-bea3-6018e3ddc2fe)
+
+Let us look at what other cells is this MUX connected to. To check that first we pick the net and run the command,
+```bash
+report_net -connections [NET_NAME]
+```
+![Screenshot from 2024-05-07 17-46-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/93fa6248-db01-4538-9a58-d2a21b84a8a2)
+
+We notice that the cell is connected to 6 other cells. but the drive strength of the MUX is low. So let us replace the MUX with a higher drive strength version.
+```bash
+replace_cell [INSTANCE_NAME] [LIB_CELL]
+```
+![Screenshot from 2024-05-07 17-47-50](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/47e29549-5691-47d2-b4a3-02f4c88fdc07)
+
+![Screenshot from 2024-05-07 17-49-27](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d20e0b58-1008-4a11-8d1a-ed52f5b2241c)
+
+![Screenshot from 2024-05-07 17-51-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/965e27d7-49db-464f-9079-80e91306d57b)
+
+We can see that the MUX has changed and the delay has slightly reduced. If we check the TNS and WNS also we can see that is has slightly reduced.
+
+![Screenshot from 2024-05-07 17-52-28](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0ff85b9b-e528-488b-ae66-bc799b9a10fb)
+
+So this is how Static Timiing Analysis is performed using OpenSTA.
