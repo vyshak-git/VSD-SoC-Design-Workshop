@@ -357,3 +357,31 @@ Both the setup and hold time are meeting. Lets us check the skew values. <br>
 
 Everything seems fine. We can now proceed to routing stage.
 
+## Day 5: Final steps for RTL2GDS using tritonRoute and openSTA
+### LABS
+##### 1. Creating a power distribustion network
+In reguler PnR flows, the power grid is created as part of the floorplan but in OpenLane flow the powergrid is created before routing. <br>
+run the command, `gen_pdn' <br>
+Once it runs it gives info on the metal pitch, width etc. <br>
+![Screenshot from 2024-05-07 21-10-47](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d18340cb-f9cd-4360-a23d-393a88f37cf4)
+
+Let us open the temporary DEF and check the design out.
+![Screenshot from 2024-05-07 21-19-31](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/2aea7db3-678b-4a29-ba63-deabe03d5998)
+![Screenshot from 2024-05-07 21-20-49](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/7b67ea65-e6a4-466f-9e4d-5ca937749cb0)
+![Screenshot from 2024-05-07 21-20-57](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/e6afa523-a6d0-4be1-a5f7-1cef9d920c92)
+
+We can observe that there are vertical and horizontal power grids and also the smaller rails that take the power to the std cells.
+
+##### 2. Routing
+After the power grid is made, we proceed to routing. <br>
+Command: `run_routing` <br>
+Once the routing gets completed, the DEF is generated. Let us open the DEF and check it out. 
+![Screenshot from 2024-05-07 22-56-42](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ba4996d1-146f-4390-a8b8-d18e96ad55e2)
+![Screenshot from 2024-05-07 22-57-09](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/bd37f652-8ef6-45dd-a6a0-8f73acc15f70)
+
+We can see the various routes and the vias between the different metal layers. 
+![Screenshot from 2024-05-07 22-57-46](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a2928b53-d2ab-44e9-be45-6636bfb8288c) <br>
+
+## Image of the final GDS file
+![Screenshot from 2024-05-07 23-00-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/73f529dc-9fda-4bd1-b173-586af31a08b2)
+
