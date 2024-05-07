@@ -270,5 +270,6 @@ When we zoom in we can search a little and the our custom inverter being used in
 ![Screenshot from 2024-05-07 16-07-57](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/931f3ed8-21d3-49b3-99cd-8820a4943e61)
 
 Use the `expand` command in tkcon to view the internal connections of the inverter.
+![Screenshot from 2024-05-07 16-10-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/92572b58-a554-4575-aa71-e14d29564ed2)
 
 
