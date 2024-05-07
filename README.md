@@ -192,6 +192,12 @@ Then we have to check DRC again using the following command.
 ![Screenshot from 2024-05-04 11-55-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/bfb14b54-02f8-4b88-840b-662d1390c359)
 We can see that the spacing has now been applied and hence the DRC has been fixed.
 
+##### 8. Describing DRC as a geometric construct
+![Screenshot from 2024-05-07 23-28-00](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/c6bd1cf4-cc93-4a3c-a494-7d81831a2944)
+![Screenshot from 2024-05-07 23-28-21](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/54d69aac-59b1-4b57-b840-c678a9d3fb3b)
+![Screenshot from 2024-05-07 23-28-48](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ae485a72-6a36-42b9-8025-c80e4eb62ca7)
+
+
 ## Day 4: Pre-layout timing analysis and importance of good clock tree
 ### LABS
 ##### 1. Converting grid info to track info
