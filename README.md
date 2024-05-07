@@ -321,3 +321,39 @@ We can see that the MUX has changed and the delay has slightly reduced. If we ch
 ![Screenshot from 2024-05-07 17-52-28](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0ff85b9b-e528-488b-ae66-bc799b9a10fb)
 
 So this is how Static Timiing Analysis is performed using OpenSTA.
+
+##### 6. Clock Tree Synthesis
+To run CTS, we run `run_cts`. If successful, the output should be as follows, <br>
+![Screenshot from 2024-05-07 19-10-11](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d83ba356-8e45-4e2e-b525-194933a1b349)
+
+Let us check the values of few of the CTS configurations. <br>
+![Screenshot from 2024-05-07 19-14-15](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3a448d20-8f8b-4730-b435-ac3656b6d07b)
+
+Now we do a post-CTS analysis. This analysis is done with real clocks. The hold analysis also matters here. <br>
+To proceed with timing analysis first we open OpenRoad and create a db.
+![Screenshot from 2024-05-07 20-18-47](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f30346d0-5d9c-4723-9f0e-c73dd3dc0b1e)
+
+We read the db and include verilog, sdc, lib etc.
+![Screenshot from 2024-05-07 20-26-43](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ea58453a-311d-4262-8477-2c68f7e0fb35)
+
+Now we can run the STA.
+![Screenshot from 2024-05-07 20-28-22](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/11089870-c7f6-4e23-ad0a-f7b523ee9353)
+![Screenshot from 2024-05-07 20-28-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/10499f71-6404-430e-828d-f4470cb6b008) <br>
+The above pictures are of the Hold time path and the slack has slightly violated. 
+
+![Screenshot from 2024-05-07 20-28-31](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/5932609a-ce05-4bb9-a087-d6a561363e4a)
+![Screenshot from 2024-05-07 20-28-47](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/7f726609-7787-4b24-a025-ca29f7f6d9d1) <br>
+The above pictures are of setup analysis and the slack is met. <br>
+So we only have the hold violation to fix. To fix it let us remove clock buffer 1 so that the tool is forced to use a higher drive strength buffer.
+```bash
+set ::env(CTS_CLK_BUFFER_LIST) [lreplace $::env(CTS_CLK_BUFFER_LIST) 0 0]
+```
+Once we do this we have to run the cts again and create another db just like before and then perform STA. After replacing the following are the results.
+![Screenshot from 2024-05-07 20-45-35](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3a866a37-175f-4301-a596-6a58809d5ed8)
+![Screenshot from 2024-05-07 20-45-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a3842740-7dcf-438b-908a-4b48d7ace9c4)
+
+Both the setup and hold time are meeting. Lets us check the skew values. <br>
+![Screenshot from 2024-05-07 20-46-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/d83fb8ac-cef9-46b2-92cf-02a8071d98a2)
+
+Everything seems fine. We can now proceed to routing stage.
+
