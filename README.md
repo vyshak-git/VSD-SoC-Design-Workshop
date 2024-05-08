@@ -42,7 +42,7 @@ Commands: <br>
 ```bash
 run_synthesis
 ```
-After synthesis is completed, we get a stats on the number of cells, the area consumed by the cells and the timing slack details.
+After synthesis is completed, we get a stats on the number of cells, the area consumed by the cells and the timing slack details. <br>
 ![Screenshot from 2024-05-01 13-02-40](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/b217f951-5a57-4b39-9965-17dc2d2a4951)
 ![Screenshot from 2024-05-01 13-02-52](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/9ed9f9d9-1b58-4f8e-a9f6-c0ced559c6ff)
 ![Screenshot from 2024-05-01 13-03-02](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/e5b20604-fa74-4a5e-973e-33da3325b8c5)
@@ -79,7 +79,9 @@ The standard cells are also present in the floorplan in the left bottom but they
 
 ##### 2. Running placement
 To run placement we use the following command: <br>
-`run_placement` <br>
+```bash
+run_placement
+```
 The placement stats are generated. <br>
 ![Screenshot from 2024-05-01 18-03-54](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/159f70ef-505e-42a6-a7d9-c66bc23250f1)
 
@@ -183,17 +185,21 @@ This displays the error. Below are 2 examples. <br>
 ##### 7. Fixing Poly.9 error
 Lets open up the `poly.mag` file to check the poly related DRC issues. <br>
 ![Screenshot from 2024-05-04 11-30-56](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8eac3bc8-bcb6-43a1-a042-7f8f084e29f1) <br>
+
 The error poly.9 is about the spacing between the poly resistors and the poly or the diff/tap cells. The min spacing should be 480u. Lets see the spacing in the layout. <br>
 ![Screenshot from 2024-05-04 11-33-20](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/86bc0562-eca7-418d-851a-4e192da2a396)
 ![Screenshot from 2024-05-04 11-33-51](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/66658bd8-86b8-4e49-a800-37375ba26342)
 ![Screenshot from 2024-05-04 11-34-55](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/203a079a-95c5-4da0-b5e4-0c187b3b818a) <br>
 From the above screenshot we can see that the spacing is 210um which doesn't fulfill the min requirements.
 Let us fix this by making few changes in the `sky130A.tech` file. <br>
+
 ![Screenshot from 2024-05-04 11-43-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f2210a9d-eddd-4bbc-9b8f-913ed80c0d5a)
 ![Screenshot from 2024-05-04 11-43-32](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/411ff36e-4adf-429c-8202-0afbd1c767ee) <br>
 In the above two screenshots of the tech file we can see that min spacing is defined only between poly resistors and diffusion and N-tap. There is no mention of spacing between poly resistors and poly. So we need to include the statements in both the sections. <br>
+
 ![Screenshot from 2024-05-04 11-44-45](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/f8fc4b8c-7502-428e-8b54-d03e0c9eae33)
 ![Screenshot from 2024-05-04 11-45-40](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/57558a06-79d9-4522-a69f-dfd72094a6e6) <br>
+
 Once written, we save the tech file. then run the following command in the tkcon window,
 `tech load sky130A.tech` <br>
 ![Screenshot from 2024-05-04 11-54-14](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/90d527db-672a-4188-93ab-ab3df32c59fd)
@@ -217,7 +223,7 @@ We first open the track information in the following directory. <br>
 ![Screenshot from 2024-05-04 17-15-43](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/46fe098b-404c-4acf-aa94-792c7c7d00cd)
 ![Screenshot from 2024-05-04 17-16-00](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3ced9a5c-ab0d-40ac-9b26-69faaf2bfc73) <br>
 Here the first value depicts the offset value and the second value depicts the pitch of the metal. X means on the x-axis and Y means on the y-axis. so the offset of li1 on x-axis is 0.23um and on y-axis it is 0.17um. The metal pitch for li1 on x-axis is 0.46um and on y-axis it is 0.34um. <br>
-Now we need to convert our grid lines according to the track information. Let us look at the current grid lines, <br>
+Now let us convert our grid lines according to the track information to check if the input and output ports fall at the intersection of the grids. Let us look at the current grid lines, <br>
 ![Screenshot from 2024-05-04 17-17-33](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/ec135b6e-41a3-4e0f-af7c-84e4664e02b5)
 
 The ports need to fall on the intersection of the grid lines so that they can be connected easily both vertically and horizontally. The width of the standard cell must be in the odd multiples of X pitch. We set the grid values according to the track info file. <br>
@@ -229,10 +235,7 @@ We can see that the grid boxes have expanded in size and the ports are placed at
 First let us save the layout with a custom name. Here we give the name `sky130_vsdinv.mag` <br>
 ![Screenshot from 2024-05-07 13-13-08](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/2e05c24d-a04d-40e6-9f27-75180300edf3)
 
-We extract this design in the lef format using the command, <br>
-`
-lef write
-`
+We extract this design in the lef format using the command, `lef write` <br>
 ![Screenshot from 2024-05-07 13-13-24](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/6a0d4ddf-0629-4b96-83a0-6ef1cf79d54c)
 
 There should be a new file called `sky130_vsdinv.lef` now in the directory. Let us open it up and see the contents. <br>
@@ -338,6 +341,7 @@ We can see that the MUX has changed and the delay has slightly reduced. If we ch
 
 ![Screenshot from 2024-05-07 17-52-28](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/0ff85b9b-e528-488b-ae66-bc799b9a10fb)
 
+After this we try some furthur replacing to try and reduce the slack as much as possible before proceeding to the next stage. <br>
 So this is how Static Timiing Analysis is performed using OpenSTA.
 
 ##### 6. Clock Tree Synthesis
@@ -366,7 +370,7 @@ So we only have the hold violation to fix. To fix it let us remove clock buffer 
 ```bash
 set ::env(CTS_CLK_BUFFER_LIST) [lreplace $::env(CTS_CLK_BUFFER_LIST) 0 0]
 ```
-Once we do this we have to run the cts again and create another db just like before and then perform STA. After replacing the following are the results.
+Once we do this we have to run the cts again and create another db just like before and then perform STA. After replacing the following are the results. <br>
 ![Screenshot from 2024-05-07 20-45-35](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/3a866a37-175f-4301-a596-6a58809d5ed8)
 ![Screenshot from 2024-05-07 20-45-41](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a3842740-7dcf-438b-908a-4b48d7ace9c4)
 
@@ -399,6 +403,8 @@ Once the routing gets completed, the DEF is generated. Let us open the DEF and c
 
 We can see the various routes and the vias between the different metal layers. 
 ![Screenshot from 2024-05-07 22-57-46](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/a2928b53-d2ab-44e9-be45-6636bfb8288c) <br>
+
+That was the final step of the PnR flow. If we have come across any timing violation after routing then we have to fix it as part of post-route timing analysis. Once the timing and drc violations are fixed we are ready with the GDS file which can be then proceed with the tape-out.
 
 ## Image of the final GDS file
 ![Screenshot from 2024-05-07 23-00-13](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/73f529dc-9fda-4bd1-b173-586af31a08b2)
