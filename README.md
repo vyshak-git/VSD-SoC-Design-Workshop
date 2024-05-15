@@ -52,6 +52,20 @@ Each run generates few output files. These are reports, logs, results etc. The o
 ![Screenshot from 2024-05-01 13-04-00](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/be34af7f-5fb0-412b-adc8-f6e89ddbd958)
 ![Screenshot from 2024-05-01 13-04-24](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/97ba7f62-099d-4995-9f5f-724f4a4b3689)
 
+##### Assignment
+Let us calculate the flop ratio by using the synthesis stats. <br>
+Flop Ratio = No. of D flip-flops/Total no. of cells <br>
+**Note:** The below report used is after the addition of a custom inverter LEF which will be covered later on in the repo. That is the reason for the changed values compared to the stats above. <br>
+![Screenshot from 2024-05-15 19-57-48](https://github.com/vyshak-git/VSD-SoC-Design-Workshop/assets/84836428/8b25c97f-9041-477d-b21c-77988e51a6ce) <br>
+
+As we can see from the above report,
+```bash
+Total no. of cells = 18584
+No. of D Flip-Flops = 1613
+Flop Ratio = 1613/18584
+           = 0.0868
+           = 8.68%
+```
 ## Day 2: Good Floorplan vs Bad Floorplan and introduction to library cells
 ### LABS
 ##### 1. Running floorplan
